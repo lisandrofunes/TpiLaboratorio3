@@ -278,6 +278,7 @@ export async function newRegister(){
     let d = document;
     
     d.querySelector('.contenidoTitulo').innerHTML = 'Agregar Usuario';
+	d.querySelector('.contenidoTituloSec').innerHTML += 'Agregar';
    
     crearFormulario();
 
@@ -289,7 +290,7 @@ export async function editRegister(id){
     let d = document;
     idUsuario = id;
     d.querySelector('.contenidoTitulo').innerHTML = 'Editar Usuario';
-   
+    d.querySelector('.contenidoTituloSec').innerHTML += 'Editar';
     crearFormulario();
 
     formulario = d.querySelector(".frmAmUsuario")

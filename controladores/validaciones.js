@@ -56,9 +56,9 @@ Función para validar data repetida
   
     }
   
-    else if(image["size"] > 500000){
+    else if(image["size"] > 30000){
   
-      alert( "La imagen no puede pesar mas de 500KB");
+      alert( "La imagen no puede pesar mas de 30KB");
   
       return;
   

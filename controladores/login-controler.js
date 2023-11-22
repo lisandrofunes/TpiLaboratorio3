@@ -62,6 +62,9 @@ export function setLogin (){
 async function usuarioExiste() {
 
     let existeUsuario;
+    let usuarioActivo;
+    let usuarioFoto;
+    let usuarioId;
     const spinner = document.querySelector('#spinner');
 
     await usuariosServices.listar( )
@@ -69,6 +72,9 @@ async function usuarioExiste() {
             respuesta.forEach(usuario => {
                 
                 if (usuario.correo === inputEmail.value && usuario.password === inputPassword.value) {
+                    usuarioId = usuario.id;
+                    usuarioActivo = usuario.nombre + ' ' + usuario.apellido;
+                    usuarioFoto = usuario.avatar;
                     return existeUsuario = true;
                 } else {
                     return;
@@ -83,6 +89,12 @@ async function usuarioExiste() {
         //ocultar login
         frmLogin.outerHTML= '';
         document.getElementById("sitio").classList.remove('d-none');
+       
+        //guardar en sessionStorage
+        sessionStorage.setItem('usuarioId', usuarioId);
+        sessionStorage.setItem('usuarioActivo', usuarioActivo);
+        sessionStorage.setItem('usuarioFoto', usuarioFoto);
+
         setUsuarioAutenticado(true); 
         window.location.href = "#/home" ;
     }
