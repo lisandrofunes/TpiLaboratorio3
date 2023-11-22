@@ -1,29 +1,26 @@
-import { usuariosServices } from "../../servicios/usuarios-servicios.js";
+import { categoriasServices } from "../../servicios/categorias-servicios.js";
 import { newRegister } from "./new.js";
 import { editRegister } from "./new.js";
 
 
 
-const htmlUsuarios = 
+const htmlCategorias = 
 `<div class="card">
    <div class="card-header">
    
    <h3 class="card-title"> 
-       <a class="btn bg-dark btn-sm btnAgregarUsuario" href="#/newUsuario">Agregar Usuario</a>
+       <a class="btn bg-dark btn-sm btnAgregarCategoria" href="#/newCategoria">Agregar Categoria</a>
    </h3>
 
    </div>
 
    <!-- /.card-header -->
    <div class="card-body">            
-   <table id="usuariosTable" class="table table-bordered table-striped tableUsuario" width="100%">
+   <table id="categoriasTable" class="table table-bordered table-striped tableCategoria" width="100%">
        <thead>
            <tr>
            <th># </th>
-           <th>Apellido</th>
-           <th>Nombre</th>
-           <th>Correo</th>
-           <th>Ciudad</th>
+           <th>Categorias</th>
            <th>Acciones</th>
            </tr>
        </thead>
@@ -33,27 +30,27 @@ const htmlUsuarios =
    <!-- /.card-body -->
 </div> `; 
 
-export async function Usuarios(){
+export async function Categorias(){
     let d = document
     let res='';
-    d.querySelector('.contenidoTitulo').innerHTML = 'Usuarios';
+    d.querySelector('.contenidoTitulo').innerHTML = 'Categorías';
     d.querySelector('.contenidoTituloSec').innerHTML = '';
-    d.querySelector('.rutaMenu').innerHTML = "Usuarios";
-    d.querySelector('.rutaMenu').setAttribute('href',"#/usuarios");
+    d.querySelector('.rutaMenu').innerHTML = "Categorías";
+    d.querySelector('.rutaMenu').setAttribute('href',"#/categorias");
     let cP =d.getElementById('contenidoPrincipal');
     
-    res = await usuariosServices.listar();
+    res = await categoriasServices.listar();
     res.forEach(element => {
-      element.action = "<div class='btn-group'><a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarUsuario'  href='#/editUsuario' data-idUsuario='"+ element.id +"'> <i class='fas fa-pencil-alt'></i></a><a class='btn btn-danger btn-sm rounded-circle removeItem btnBorrarUsuario'href='#/delUsuario' data-idUsuario='"+ element.id +"'><i class='fas fa-trash'></i></a></div>";
+      element.action = "<div class='btn-group'><a class='btn btn-warning btn-sm mr-1 rounded-circle btnEditarCategoria'  href='#/editCategoria' data-idCategoria='"+ element.id +"'> <i class='fas fa-pencil-alt'></i></a><a class='btn btn-danger btn-sm rounded-circle removeItem btnBorrarCategoria'href='#/delCategoria' data-idCategoria='"+ element.id +"'><i class='fas fa-trash'></i></a></div>";
     });  
      
-    cP.innerHTML =  htmlUsuarios;
+    cP.innerHTML =  htmlCategorias;
  
     llenarTabla(res);
 
-    let btnAgregar = d.querySelector(".btnAgregarUsuario");
-    let btnEditar = d.querySelectorAll(".btnEditarUsuario");
-    let btnBorrar = d.querySelectorAll(".btnBorrarUsuario");
+    let btnAgregar = d.querySelector(".btnAgregarCategoria");
+    let btnEditar = d.querySelectorAll(".btnEditarCategoria");
+    let btnBorrar = d.querySelectorAll(".btnBorrarCategoria");
 
     btnAgregar.addEventListener("click", agregar);
     for(let i=0 ; i< btnEditar.length ; i++){
@@ -68,13 +65,13 @@ function agregar(){
 
 }
 function editar(){
-   let id = this.getAttribute('data-idUsuario') ;
+   let id = this.getAttribute('data-idCategoria') ;
    editRegister(id);
     
 }
 
 async function borrar(){
-    let id = this.getAttribute('data-idUsuario') ;
+    let id = this.getAttribute('data-idCategoria') ;
     let borrar=0;
   await Swal.fire({
         title: 'Está seguro que desea eliminar el registro?',
@@ -93,22 +90,19 @@ async function borrar(){
         }
       })
       if (borrar === 1)
-            await usuariosServices.borrar(id); 
-      window.location.href = "#/usuarios";  
+            await categoriasServices.borrar(id); 
+      window.location.href = "#/categorias";  
 }
 
 function llenarTabla(res){ 
    
 
-    new DataTable('#usuariosTable', {
+    new DataTable('#categoriasTable', {
         responsive:true,
         data : res,
         columns: [
             { data: 'id' },    
-            { data: 'apellido' },
-            { data: 'nombre' },
-            { data: 'correo' },
-            { data: 'ciudad' },
+            { data: 'descripcion' },
             { data: 'action', "orderable":false }
             
         ],
