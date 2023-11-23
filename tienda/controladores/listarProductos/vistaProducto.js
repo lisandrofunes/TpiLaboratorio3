@@ -23,14 +23,14 @@ export async function vistaProducto() {
     const producto = await leerDatosProducto(idProducto);
 
     // 5 - Llamar a la función htmlVistaProducto
-    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio);
+    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio, producto.imagen);
 
     // 6 - Asignar el resultado al elemento .vistaProducto
     vistaProductoElement.innerHTML = vistaProductoHtml;
 
     // 7 - Enlazar el evento click del botón btnComprar a la función registrarCompra
     const btnComprar = document.querySelector('.btnComprar');
-    btnComprar.addEventListener('click', registrarCompra);
+    btnComprar.addEventListener('click', registrarCompra, false);
 }
 
 
