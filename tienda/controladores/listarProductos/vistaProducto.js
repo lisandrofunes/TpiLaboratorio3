@@ -3,18 +3,36 @@ import { productosServices } from "../../../servicios/productos-servicios.js";
 import { ventasServices } from "../../../servicios/ventas-servicios.js";
 import { getUsuarioAutenticado } from "../login/login.js";
 
-export async function vistaProducto(){
-    /**1-En esta función se deben capturar los elementos html: .carrusel, .seccionProducto, .seccionLogin. Para luego 
-     * blanquear su contenido. 
-     * 2-Se deberá capturar el elemento .vistaProducto.
-     * 3-Se deberá llamar a la función leerParametro para recuperar de la url el idProducto. 
-     * 4-Luego se deberán leer los datos del producto indentificado con el idProducto recuperado.
-     * 5-Llamar a la función htmlVistaProducto.
-     * 6-El resultado de la función deberá asignarse al elemento .vistaProducto capturado previamente.
-     * 7-Se deberá capturar el elemento html correspondiente al anchor btnComprar y enlazar el evento click a la función registrarCompra.  
-    */
-   
+
+export async function vistaProducto() {
+    // 1 - Capturar y blanquear los elementos html
+    const carrusel = document.querySelector('.carrusel');
+    const seccionProducto = document.querySelector('.seccionProducto');
+    const seccionLogin = document.querySelector('.seccionLogin');
+    carrusel.innerHTML = '';
+    seccionProducto.innerHTML = '';
+    seccionLogin.innerHTML = '';
+
+    // 2 - Capturar el elemento .vistaProducto
+    const vistaProductoElement = document.querySelector('.vistaProducto');
+
+    // 3 - Leer el idProducto de la URL
+    const idProducto = leerParametro();
+
+    // 4 - Leer los datos del producto identificado por idProducto
+    const producto = await leerDatosProducto(idProducto);
+
+    // 5 - Llamar a la función htmlVistaProducto
+    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio);
+
+    // 6 - Asignar el resultado al elemento .vistaProducto
+    vistaProductoElement.innerHTML = vistaProductoHtml;
+
+    // 7 - Enlazar el evento click del botón btnComprar a la función registrarCompra
+    const btnComprar = document.querySelector('.btnComprar');
+    btnComprar.addEventListener('click', registrarCompra);
 }
+
 
 function htmlVistaProducto(id, nombre, descripcion, precio, imagen) {
     /**1- ESTA FUNCION RECIBE COMO PARAMETRO los siguiente datos id, nombre, descripcion, precio e imagen del producto */
@@ -27,9 +45,31 @@ function htmlVistaProducto(id, nombre, descripcion, precio, imagen) {
      *   let cadena = `Hola, ${titulo} Claudia  en que podemos ayudarla`;
      *   
     */
-    
+
+    let cad =
+        `
+            <div class="imagen">
+                <img src="${imagen}" alt="producto">
+            </div>
+            <div class="texto">
+                <p id="nameProducto" data-idProducto=${id}>${nombre}</p>
+
+                <p id="descripcionProducto">${descripcion}</p>
+
+                <p id="precioProducto">${precio}</p>
+
+                <div class="form-group">
+                    <label for="cantidadProducto">Cantidad</label>
+                    <input type="number" step="1" min ="1" value="1" id="cantidadProducto">
+                </div>
+
+                <a id="btnComprar" >Comprar</a>
+            </div>
+        `;
+    return cad;
 }
-function leerParametro(){
+
+function leerParametro() {
     // Captura el idProducto de la dirección URL enviada por la página que llama
     const words = new URLSearchParams(window.location.search);
     let cad = words.get("idProducto");
@@ -38,25 +78,35 @@ function leerParametro(){
 }
 
 
-function registrarCompra(){
-    /**1-Esta función es la encargada de procesar el evento click del anchor btnComprar.
-     * 2-Luego deberá recuperar con la función getUsuarioAutenticado presente en el módulo login.js el objeto session
-     * 3-Si la propiedad autenticado del objeto session es falso, el usuario no ha iniciado sesión, y se deberá emitir 
-     *   una alerta que comunique al usuario que antes de realizar una compra debe haber iniciado sesión y salir de la 
-     * ejecución de la función.
-     * 4-Si la propiedad autenticado es true la ejecución continua.
-     * 5-En este punto se deben almacenar los datos necesario para registrar la venta.
-     * 5-Necesitamos idUsuario, emailUsuario, idProducto, nameProducto, cantidad y fecha.
-     * 6-Los dos primeros los extraemos del objeto session.
-     * 7-El resto de los datos los capturamos desde el objeto document utilizando los id: nameProducto, cantidadProducto. 
-     *   El idProducto lo recuperamos desde el atributo data-idproducto y a fecha la obtenemos desde la fecha del sistema con
-     *   el objeto Date() de javascript.
-     * 8-Una vez reunido todos los datos necesarios llamamos a la función ventasServices.crear pasando lo parámetros obtenidos. 
-     * 9-Luego de registrar la venta utilizando el objeto location.replace("tienda.html") renderizamos nuevamente la página 
-     *   dejando el sitio en el estado inicial.
-     * 10-Finalmente emitimos una alerta con la leyenda "Compra finalizada."
-     *     
-     */
-    
-    
+
+function registrarCompra() {
+    // Paso 1: Procesar el evento click del botón btnComprar
+    // Paso 2: Recuperar el objeto session utilizando la función getUsuarioAutenticado del módulo login.js
+    const session = getUsuarioAutenticado();
+
+    // Paso 3: Verificar si el usuario ha iniciado sesión
+    if (!session.autenticado) {
+        // Emitir una alerta si el usuario no ha iniciado sesión
+        alert("Antes de realizar una compra, debes iniciar sesión.");
+        return; // Salir de la ejecución de la función
+    }
+
+    // Paso 4: Continuar la ejecución si el usuario ha iniciado sesión
+    // Paso 5: Almacenar los datos necesarios para registrar la venta
+    const idUsuario = session.idUsuario;
+    const emailUsuario = session.emailUsuario;
+    const idProducto = document.querySelector('.btnComprar').dataset.idproducto; // ver aca la diferencia
+    const nameProducto = document.getElementById('nameProducto').value;
+    const cantidad = document.getElementById('cantidadProducto').value;
+    const fecha = new Date().toISOString();
+
+    // Paso 8: Llamar a la función ventasServices.crear para registrar la venta
+    ventasServices.crear(idUsuario, emailUsuario, idProducto, nameProducto, cantidad, fecha);
+
+    // Paso 9: Redireccionar a la página "tienda.html"
+    location.replace("tienda.html");
+
+    // Paso 10: Emitir una alerta para indicar que la compra ha finalizado
+    alert("Compra finalizada.");
 }
+
