@@ -80,19 +80,19 @@ function leerParametro() {
 
 
 function registrarCompra() {
-    // Paso 1: Procesar el evento click del botón btnComprar
-    // Paso 2: Recuperar el objeto session utilizando la función getUsuarioAutenticado del módulo login.js
+    // 1 - Procesar el evento click del botón btnComprar
+    // 2 - Recuperar el objeto session utilizando la función getUsuarioAutenticado del módulo login.js
     const session = getUsuarioAutenticado();
 
-    // Paso 3: Verificar si el usuario ha iniciado sesión
+    // 3 - Verificar si el usuario ha iniciado sesión
     if (!session.autenticado) {
         // Emitir una alerta si el usuario no ha iniciado sesión
         alert("Antes de realizar una compra, debes iniciar sesión.");
         return; // Salir de la ejecución de la función
     }
 
-    // Paso 4: Continuar la ejecución si el usuario ha iniciado sesión
-    // Paso 5: Almacenar los datos necesarios para registrar la venta
+    // 4 - Continuar la ejecución si el usuario ha iniciado sesión
+    // 5 - Almacenar los datos necesarios para registrar la venta
     const idUsuario = session.idUsuario;
     const emailUsuario = session.emailUsuario;
     const idProducto = document.querySelector('.btnComprar').dataset.idproducto; // ver aca la diferencia
@@ -100,13 +100,13 @@ function registrarCompra() {
     const cantidad = document.getElementById('cantidadProducto').value;
     const fecha = new Date().toISOString();
 
-    // Paso 8: Llamar a la función ventasServices.crear para registrar la venta
+    // 8 - Llamar a la función ventasServices.crear para registrar la venta
     ventasServices.crear(idUsuario, emailUsuario, idProducto, nameProducto, cantidad, fecha);
 
-    // Paso 9: Redireccionar a la página "tienda.html"
+    // 9 - Redireccionar a la página "tienda.html"
     location.replace("tienda.html");
 
-    // Paso 10: Emitir una alerta para indicar que la compra ha finalizado
+    // 10 - Emitir una alerta para indicar que la compra ha finalizado
     alert("Compra finalizada.");
 }
 
