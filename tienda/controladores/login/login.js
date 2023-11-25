@@ -4,7 +4,27 @@ import { usuariosServices } from "../../../servicios/usuarios-servicios.js";
 /**1- Se debe asignar a la siguiente constante todo el código correspondiente al componente de login (/asset/modulos/login.html)  */
 const htmlLogin=
 `
-    ASIGNAR EL COMPONENTE CORRESPONDIENTE!!!!
+<div class="contenedorLogin">
+    <div class="cajaLogin">
+        <p >Iniciar sesión</p>
+        <form  class="formLogin" >
+            <div class="input-group">
+                <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="loginEmail" autocomplete required>
+            </div>
+            <div class="input-group">
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="loginPassword" autocomplete required>
+            </div>
+            <div class="input-group">
+                <input type="password" class="form-control" id="reLoginPassword" placeholder="Repetir Password" name="reLoginPassword"  required>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                <button type="submit"  id="iniciar-sesion" class="btnAmarillo">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 `;
 /*2-Se deben definir 4 variables globales al módulo, una para el formulario html, y otras tres para los inputs de email, contraseña y 
 *   repetir contraseña
@@ -13,13 +33,24 @@ var formulario;
 var inputEmail;
 var inputPassword;
 var inputRepetirPass;
-
+// ya esta hecho
 
 
 export async function login(){
     /** 3- Esta función se encarga de llamar a la función crearFormulario y de enlazar el evento submit del formulario de login
      * 
     */
+    //tomar el formulario, capturar el submir para cancelarlo
+    formulario = document.querySelector("formLogin");
+
+    crearFormulario(false);
+
+    formulario.addEventListener("submit", function(event) {
+        //event.preventDefault(); // Esto evita que se envíe el formulario
+    
+        // Llamada a una función asincrónica
+        ingresar(event);
+      });
     
 }  
 
@@ -30,7 +61,8 @@ export async function register(){
       *     Por último enlaza el evento submit del formulario a la función registrarUsuario.
      * 
     */
-   
+    crearFormulario(true);
+    formulario.addEventListener("submit", registrarUsuario);
 }  
 
 
@@ -38,6 +70,7 @@ export async function register(){
 function crearFormulario(registrar){
     /**
      * 1- Esta función deberá capturar el elemento cuya clase es .carrusel y le asignará en su interior un blanco para eliminar su contenido previo.
+     * querySelector() asignar al innerHtml un vacio
      * 2- Deberá realizar lo mismo para la clase .seccionProductos y .vistaProducto.
      * 3- Luego deberá capturar la .seccionLogin para asignarle el contenido html del componente login, el cual se encuentra previamente 
      *    cargado en la constante htmlLogin.
@@ -45,13 +78,32 @@ function crearFormulario(registrar){
      *    inputEmail, inputPassword e inputRepetirPass.
      * 5- En el caso que el parámetro registrar sea falso deberá eliminar el contenido del elemento id reLoginPassword.
      * 6- Para el caso que el parámetro registrar sea verdadero deberá cambiar el valor de la propiedad css dysplay a block. De esta forma
-     *    el input reLoginPassword se mostrará en pantalla.
+     *    el input reLoginPassword se mostrará en pantalla. 
+     * outerHtml vacio
      * 7- Por último se deberá capturar el formulario indentificado con la clase .formLogin y asignarlo a la variable global formulario.
      */
     
+    carrusel = document.querySelector(".carrusel").innerHTML = "";
+    seccionProductos = document.querySelector(".seccionProductos").innerHTML = "";
+    vistaProducto = document.querySelector(".vistaProducto").innerHTML = "";
+    seccionLogin = document.querySelector(".seccionLogin").innerHTML = htmlLogin;
+
+    inputEmail = document.getElementById('loginEmail').value;
+    inputPassword = document.getElementById('loginPassword').value;
+    inputRepetirPass = document.getElementById('reLoginPassword').value;
+
+    if (!registrar) {
+        // Eliminar contenido de reLoginPassword si registrar es falso
+        inputRepetirPass.value = '';
+    } else {
+        inputRepetirPass.style.display = 'block';
+    }
+
+    formulario = document.querySelector('.formLogin');
+
 } 
 
-async function  ingresar(e){
+async function ingresar(e){
     /**
      * 1- Esta función tiene como objetivo controlar que el texto en inputEmail e inputPassword se corresponda con alguna cuenta almacenada
      *    en el REST-API.
@@ -65,11 +117,31 @@ async function  ingresar(e){
      *     b- Llamar a la función mostrarUsuario, pasandole como parámetro el texto del email de la cuenta.  
      * 5- En el caso de que el usuario no sea válido se deberá mostrar una alerta con el texto 'Email o contraseña incorrecto, intenta nuevamente'.
      */
+
+    e.preventDefault()
+    // let idUsuario = await usuarioExiste()
+    // if(idUsuario){
+
+    // }
+    inputEmail = document.getElementById('loginEmail').value;
+    inputPassword = document.getElementById('loginPassword').value;
+
+    // Llamar a la función usuarioExiste para verificar si el usuario es válido
+    const idUsuario = await usuarioExiste(inputEmail, inputPassword);
+
+    if (idUsuario) {
+        // Usuario válido
+        usuariosServices.setUsuarioAutenticado(true, idUsuario);
+        mostrarUsuario(inputEmail);
+    } else {
+        // Usuario no válido
+        alert('Email o contraseña incorrecto, intenta nuevamente');
+    }
    
 
 }
 
-async function  registrarUsuario(e){
+async function registrarUsuario(e){
     /**
      * 1- Esta función tiene como objetivo controlar que el texto en inputPassword sea exactamente igual al texto ingresado en
      *    inputRepetirPass y luego registrar la cuenta en el REST-API.
@@ -81,7 +153,25 @@ async function  registrarUsuario(e){
      *    se muestre la pantalla de login. 
      * 5- En caso negativo o falso mostrará una alerta indicando que las contraseñas ingresadas no son iguales.  
      */
-   
+
+    e.preventDefault(); 
+
+    if (inputPassword.value === inputRepetirPass.value) {
+        try {
+            
+            await usuariosServices.crear(null, null, inputEmail, inputPassword); // Suponiendo que usuariosServices tiene un método llamado 'crear' para registrar usuarios
+            
+            // Paso 5: Mostrar alerta y redireccionar a la pantalla de login
+            alert('Email registrado');
+            window.location.href = '#login'; // Redirigir a la pantalla de login
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+            // Manejar el error, mostrar mensaje de error, etc.
+        }
+    } else {
+        // Paso 5: Contraseñas no coinciden, mostrar alerta
+        alert('Las contraseñas ingresadas no son iguales');
+    }
     
 }
 async function usuarioExiste() {
@@ -93,6 +183,40 @@ async function usuarioExiste() {
      * 3- Si el email y la contraseña no son válido devuelve falso.    
      */
     
+    let existeUsuario
+    let usuarioId
+
+    await usuariosServices.listar( )
+        .then(respuesta => {
+            respuesta.forEach(usuario => {
+                
+                if (usuario.correo === inputEmail.value && usuario.password === inputPassword.value) {
+                    usuarioId = usuario.id;
+                    usuarioActivo = usuario.nombre + ' ' + usuario.apellido;
+                    usuarioFoto = usuario.avatar;
+                    return existeUsuario = true;
+                } else {
+                    return;
+                }
+            });
+        })
+        .catch(error => console.log(error));
+
+    if (!existeUsuario) {
+        mostrarMensaje('Email o contraseña incorrecto, intenta nuevamente');
+    } else {
+        //ocultar login
+        formulario.outerHTML= '';
+        // document.getElementById("sitio").classList.remove('d-none');
+       
+        //guardar en sessionStorage
+        sessionStorage.setItem('usuarioId', usuarioId);
+        sessionStorage.setItem('usuarioActivo', usuarioActivo);
+        sessionStorage.setItem('usuarioFoto', usuarioFoto);
+
+        setUsuarioAutenticado(true); 
+        window.location.href = "#/home" ;
+    }
 }
 
 export function mostrarUsuario(email){
@@ -101,6 +225,19 @@ export function mostrarUsuario(email){
      * 2- Deberá capturar del dom la clase .btnRegister y asignarle el texto "Logout" y a este elemento asignarle el valor
      *    "#logout" sobre el atributo href.
      **/
+
+    // Paso 1
+    const btnLogin = document.querySelector('.btnLogin');
+    if (btnLogin) {
+        btnLogin.textContent = email; // Asignar el texto del parámetro email al botón de login si existe
+    }
+
+    // Paso 2
+    const btnRegister = document.querySelector('.btnRegister');
+    if (btnRegister) {
+        btnRegister.textContent = 'Logout'; // Asignar texto "Logout" al botón de registro si existe
+        btnRegister.setAttribute('href', '#logout'); // Asignar el valor '#logout' al atributo href del botón de registro
+    }
     
 
 }
@@ -119,6 +256,12 @@ export function setUsuarioAutenticado(booleano, idUsuario) {
      *    inputEmail.
      */
     
+    let email=""
+    if (inputEmail)
+        email = inputEmail.value
+    sessionStorage.setItem("autenticado", booleano)
+    sessionStorage.setItem("idUsuario", idUsuario)
+    sessionStorage.setItem("email", email)
 
 
 }
@@ -128,6 +271,13 @@ export function getUsuarioAutenticado() {
      * autenticado, idUsuario y email.
      * 2- Luego los devolverá como resultado.
      */
+
+    var session = new Object()
+    sesion.autenticado = sessionStorage.getItem("autenticado") === "true"
+    sesion.idUsuario = sessionStorage.getItem("idUsuario")
+    sesion.email = sessionStorage.getItem("email")
+    return session
     
        
 }
+
