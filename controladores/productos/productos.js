@@ -105,7 +105,14 @@ function llenarTabla(res){
         columns: [
             { data: 'id' },    
             { data: 'nombre' },
-            { data: 'precio' },
+            {
+                data: 'precio',
+                //La propiedad render se utiliza para transformar el contenido de una celda antes de mostrarlo en la interfaz de usuario. Es una propiedad en DataTables, data seria el precio, type, puede tener valores como filter,display, y row, representa los datos completos de la fila actual.
+                render: function (data, type, row) {
+                    // Agregar el símbolo "$" al precio
+                    return "$" + data;
+                }
+            },
             { data: 'categoria' },
             { data: 'action', "orderable":false }
             
