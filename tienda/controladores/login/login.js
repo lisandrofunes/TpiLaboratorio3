@@ -3,29 +3,29 @@ import { usuariosServices } from "../../../servicios/usuarios-servicios.js";
 
 /**1- Se debe asignar a la siguiente constante todo el código correspondiente al componente de login (/asset/modulos/login.html)  */
 const htmlLogin=
-`
-<div class="contenedorLogin">
-    <div class="cajaLogin">
-        <p >Iniciar sesión</p>
-        <form  class="formLogin" >
-            <div class="input-group">
-                <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="loginEmail" autocomplete required>
-            </div>
-            <div class="input-group">
-                <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="loginPassword" autocomplete required>
-            </div>
-            <div class="input-group">
-                <input type="password" class="form-control" id="reLoginPassword" placeholder="Repetir Password" name="reLoginPassword"  required>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                <button type="submit"  id="iniciar-sesion" class="btnAmarillo">Login</button>
+    `
+    <div class="contenedorLogin">
+        <div class="cajaLogin">
+            <p >Iniciar sesión</p>
+            <form  class="formLogin" >
+                <div class="input-group">
+                    <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="loginEmail" autocomplete="on" required>
                 </div>
-            </div>
-        </form>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="loginPassword required>
+                </div>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="reLoginPassword" placeholder="Repetir Password" name="reLoginPassword" required>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                    <button type="submit"  id="iniciar-sesion" class="btnAmarillo">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-`;
+    `;
 /*2-Se deben definir 4 variables globales al módulo, una para el formulario html, y otras tres para los inputs de email, contraseña y 
 *   repetir contraseña
 */
@@ -83,18 +83,18 @@ function crearFormulario(registrar){
      * 7- Por último se deberá capturar el formulario indentificado con la clase .formLogin y asignarlo a la variable global formulario.
      */
     
-    carrusel = document.querySelector(".carrusel").innerHTML = "";
-    seccionProductos = document.querySelector(".seccionProductos").innerHTML = "";
-    vistaProducto = document.querySelector(".vistaProducto").innerHTML = "";
-    seccionLogin = document.querySelector(".seccionLogin").innerHTML = htmlLogin;
+    document.querySelector(".carrusel").innerHTML = "";
+    document.querySelector(".seccionProductos").innerHTML = "";
+    document.querySelector(".vistaProducto").innerHTML = "";
+    document.querySelector(".seccionLogin").innerHTML = htmlLogin;
 
-    inputEmail = document.getElementById('loginEmail').value;
-    inputPassword = document.getElementById('loginPassword').value;
-    inputRepetirPass = document.getElementById('reLoginPassword').value;
+    inputEmail = document.getElementById('loginEmail');
+    inputPassword = document.getElementById('loginPassword');
+    inputRepetirPass = document.getElementById('reLoginPassword');
 
     if (!registrar) {
         // Eliminar contenido de reLoginPassword si registrar es falso
-        inputRepetirPass.value = '';
+        inputRepetirPass.remove();
     } else {
         inputRepetirPass.style.display = 'block';
     }
@@ -119,10 +119,7 @@ async function ingresar(e){
      */
 
     e.preventDefault()
-    // let idUsuario = await usuarioExiste()
-    // if(idUsuario){
 
-    // }
     inputEmail = document.getElementById('loginEmail').value;
     inputPassword = document.getElementById('loginPassword').value;
 
@@ -130,11 +127,9 @@ async function ingresar(e){
     const idUsuario = await usuarioExiste(inputEmail, inputPassword);
 
     if (idUsuario) {
-        // Usuario válido
-        usuariosServices.setUsuarioAutenticado(true, idUsuario);
+        setUsuarioAutenticado(true, idUsuario);
         mostrarUsuario(inputEmail);
     } else {
-        // Usuario no válido
         alert('Email o contraseña incorrecto, intenta nuevamente');
     }
    
@@ -158,18 +153,13 @@ async function registrarUsuario(e){
 
     if (inputPassword.value === inputRepetirPass.value) {
         try {
-            
-            await usuariosServices.crear(null, null, inputEmail, inputPassword); // Suponiendo que usuariosServices tiene un método llamado 'crear' para registrar usuarios
-            
-            // Paso 5: Mostrar alerta y redireccionar a la pantalla de login
+            await usuariosServices.crear(null, null, inputEmail.value, inputPassword.value); // Suponiendo que usuariosServices tiene un método llamado 'crear' para registrar usuarios
             alert('Email registrado');
-            window.location.href = '#login'; // Redirigir a la pantalla de login
+            window.location.href = '#login'; 
         } catch (error) {
             console.error('Error al registrar usuario:', error);
-            // Manejar el error, mostrar mensaje de error, etc.
         }
     } else {
-        // Paso 5: Contraseñas no coinciden, mostrar alerta
         alert('Las contraseñas ingresadas no son iguales');
     }
     
@@ -185,37 +175,34 @@ async function usuarioExiste() {
     
     let existeUsuario
     let usuarioId
+    let usuarioActivo
+    let usuarioFoto
 
-    await usuariosServices.listar( )
+    await usuariosServices.listar("all")
         .then(respuesta => {
-            respuesta.forEach(usuario => {
-                
-                if (usuario.correo === inputEmail.value && usuario.password === inputPassword.value) {
-                    usuarioId = usuario.id;
-                    usuarioActivo = usuario.nombre + ' ' + usuario.apellido;
-                    usuarioFoto = usuario.avatar;
+            for (let i = 0; i < respuesta.length; i++) {
+                if (respuesta[i].correo === inputEmail && respuesta[i].password === inputPassword) {
+                    usuarioId = respuesta[i].id;
+                    usuarioActivo = respuesta[i].nombre + ' ' + respuesta[i].apellido;
+                    usuarioFoto = respuesta[i].avatar;
                     return existeUsuario = true;
-                } else {
-                    return;
                 }
-            });
+            }
         })
         .catch(error => console.log(error));
 
     if (!existeUsuario) {
         mostrarMensaje('Email o contraseña incorrecto, intenta nuevamente');
     } else {
-        //ocultar login
-        formulario.outerHTML= '';
-        // document.getElementById("sitio").classList.remove('d-none');
+        document.querySelector(".seccionLogin").remove()
        
-        //guardar en sessionStorage
         sessionStorage.setItem('usuarioId', usuarioId);
         sessionStorage.setItem('usuarioActivo', usuarioActivo);
         sessionStorage.setItem('usuarioFoto', usuarioFoto);
 
-        setUsuarioAutenticado(true); 
         window.location.href = "#/home" ;
+
+        return usuarioId
     }
 }
 
@@ -226,26 +213,20 @@ export function mostrarUsuario(email){
      *    "#logout" sobre el atributo href.
      **/
 
-    // Paso 1
     const btnLogin = document.querySelector('.btnLogin');
     if (btnLogin) {
         btnLogin.textContent = email; // Asignar el texto del parámetro email al botón de login si existe
     }
 
-    // Paso 2
     const btnRegister = document.querySelector('.btnRegister');
     if (btnRegister) {
         btnRegister.textContent = 'Logout'; // Asignar texto "Logout" al botón de registro si existe
         btnRegister.setAttribute('href', '#logout'); // Asignar el valor '#logout' al atributo href del botón de registro
     }
-    
-
 }
 
 function mostrarMensaje(msj) {
-    /**
-     * Esta función muestra una alerta con el texto recibido en el parámetro msj.
-     */
+    // Esta función muestra una alerta con el texto recibido en el parámetro msj.
     alert(msj);
 }
 
@@ -277,7 +258,5 @@ export function getUsuarioAutenticado() {
     sesion.idUsuario = sessionStorage.getItem("idUsuario")
     sesion.email = sessionStorage.getItem("email")
     return session
-    
-       
 }
 

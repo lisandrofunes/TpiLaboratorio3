@@ -4,8 +4,8 @@ import { vistaProducto } from "./listarProductos/vistaProducto.js";
 import { getUsuarioAutenticado, login, mostrarUsuario, register, setUsuarioAutenticado } from "./login/login.js";
 
 export function RouterTienda(){
-    let session = getUsuarioAutenticado();
-    setSession(session); 
+    // let session = getUsuarioAutenticado();
+    // setSession(session); 
     let hash = location.hash;
    
     if (hash === '#vistaProducto'){
