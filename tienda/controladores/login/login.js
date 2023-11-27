@@ -129,6 +129,8 @@ async function ingresar(e){
     if (idUsuario) {
         setUsuarioAutenticado(true, idUsuario);
         mostrarUsuario(inputEmail);
+        // location.replace("tienda.html");
+        window.location.href = "#" ;
     } else {
         alert('Email o contraseña incorrecto, intenta nuevamente');
     }
@@ -200,8 +202,6 @@ async function usuarioExiste() {
         sessionStorage.setItem('usuarioActivo', usuarioActivo);
         sessionStorage.setItem('usuarioFoto', usuarioFoto);
 
-        window.location.href = "/#home" ;
-
         return usuarioId
     }
 }
@@ -240,9 +240,16 @@ export function setUsuarioAutenticado(booleano, idUsuario) {
     let email=""
     if (inputEmail)
         email = inputEmail.value
-    sessionStorage.setItem("autenticado", booleano)
-    sessionStorage.setItem("idUsuario", idUsuario)
-    sessionStorage.setItem("email", email)
+    if (idUsuario == -1) {
+        let botonLogin = document.querySelector(".btnLogin");
+        let botonLogout = document.querySelector(".btnRegister");
+        botonLogin.textContent = "Login";
+        botonLogout.textContent = "Registrar";
+        botonLogout.setAttribute("href", "#login");
+    }
+    sessionStorage.setItem('autenticado', booleano)
+    sessionStorage.setItem('idUsuario', idUsuario)
+    sessionStorage.setItem('email', email)
 
 
 }
@@ -254,9 +261,9 @@ export function getUsuarioAutenticado() {
      */
 
     var session = new Object()
-    session.autenticado = sessionStorage.getItem("autenticado") === "true"
-    session.idUsuario = sessionStorage.getItem("idUsuario")
-    session.email = sessionStorage.getItem("email")
+    session.autenticado = sessionStorage.getItem('autenticado') === "true"
+    session.idUsuario = sessionStorage.getItem('idUsuario')
+    session.email = sessionStorage.getItem('email')
     return session
 }
 
