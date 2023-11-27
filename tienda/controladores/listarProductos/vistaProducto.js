@@ -7,7 +7,7 @@ import { getUsuarioAutenticado } from "../login/login.js";
 export async function vistaProducto() {
     // 1 - Capturar y blanquear los elementos html
     const carrusel = document.querySelector('.carrusel');
-    const seccionProducto = document.querySelector('.seccionProducto');
+    const seccionProducto = document.querySelector('.seccionProductos');
     const seccionLogin = document.querySelector('.seccionLogin');
     carrusel.innerHTML = '';
     seccionProducto.innerHTML = '';
@@ -20,16 +20,16 @@ export async function vistaProducto() {
     const idProducto = leerParametro();
 
     // 4 - Leer los datos del producto identificado por idProducto
-    const producto = await leerDatosProducto(idProducto);
+    const producto = await productosServices.listar(idProducto);
 
     // 5 - Llamar a la función htmlVistaProducto
-    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio, producto.imagen);
+    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio, producto.foto);
 
     // 6 - Asignar el resultado al elemento .vistaProducto
     vistaProductoElement.innerHTML = vistaProductoHtml;
 
     // 7 - Enlazar el evento click del botón btnComprar a la función registrarCompra
-    const btnComprar = document.querySelector('.btnComprar');
+    const btnComprar = document.querySelector('#btnComprar');
     btnComprar.addEventListener('click', registrarCompra, false);
 }
 
@@ -63,7 +63,7 @@ function htmlVistaProducto(id, nombre, descripcion, precio, imagen) {
                     <input type="number" step="1" min ="1" value="1" id="cantidadProducto">
                 </div>
 
-                <a id="btnComprar" >Comprar</a>
+                <button id="btnComprar">Comprar</button>
             </div>
         `;
     return cad;
