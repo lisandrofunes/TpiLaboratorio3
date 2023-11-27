@@ -8,7 +8,7 @@ function htmlCategoria(id, categoria) {
     //Y ADEMAS REEMPLAZAR EL TEXTO Nombre de Categoría POR EL VALOR QUE LLEGA AL PARAMETRO CATEGORIA DE LA FUNCION*/
     //POR ULTIMO, LA FUNCION DEVOLVERA LA CADENA RESULTANTE*/
     const stringHtmlCategoria =
-    `<div class="categoria card m-5" id="categoria_${id}">
+    `<div class="categoria m-5 rounded-5" id="categoria_${id}">
          <h1 class="categoria_title">${categoria}</h1>
          <div class="productos">
              <!-- Aca se listan los productos-->
@@ -29,7 +29,7 @@ function htmlItemProducto(id, foto, nombre, precio) {
     //   let cadena = `Hola, ${titulo} Claudia  en que podemos ayudarla`;
     
    const stringHtmlItemProducto = 
-   `<div class="item-producto card p-2">
+   `<div class="item-producto p-2 pb-4 rounded-5">
         <img src="${foto}" >
         <p class="producto_nombre">${nombre}</p>
         <p class="producto_precio">$${precio}</p>
