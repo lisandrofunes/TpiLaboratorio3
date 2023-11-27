@@ -196,7 +196,7 @@ async function usuarioExiste() {
     if (!existeUsuario) {
         mostrarMensaje('Email o contraseña incorrecto, intenta nuevamente');
     } else {
-        document.querySelector(".seccionLogin").remove()
+        document.querySelector(".seccionLogin").innerHTML = ""
        
         sessionStorage.setItem('usuarioId', usuarioId);
         sessionStorage.setItem('usuarioActivo', usuarioActivo);
@@ -239,7 +239,7 @@ export function setUsuarioAutenticado(booleano, idUsuario) {
     
     let email=""
     if (inputEmail)
-        email = inputEmail.value
+        email = inputEmail
     if (idUsuario == -1) {
         let botonLogin = document.querySelector(".btnLogin");
         let botonLogout = document.querySelector(".btnRegister");

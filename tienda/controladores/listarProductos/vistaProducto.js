@@ -76,7 +76,7 @@ function leerParametro() {
 
 
 
-function registrarCompra() {
+async function registrarCompra() {
     // 1 - Procesar el evento click del botón btnComprar
     // 2 - Recuperar el objeto session utilizando la función getUsuarioAutenticado del módulo login.js
     const session = getUsuarioAutenticado();
@@ -91,16 +91,16 @@ function registrarCompra() {
     // 4 - Continuar la ejecución si el usuario ha iniciado sesión
     // 5 - Almacenar los datos necesarios para registrar la venta
     const idUsuario = session.idUsuario;
-    const emailUsuario = session.emailUsuario;
+    const emailUsuario = session.email;
 
         
-    const nameProducto = document.getElementById('nameProducto').value;
-    const idProducto = nameProducto.getAttribute('data-idproducto');
+    const nameProducto = document.getElementById('nameProducto');
+    const idProducto = nameProducto.getAttribute('data-idProducto');
     const cantidad = document.getElementById('cantidadProducto').value;
-    const fecha = new Date();
+    const fecha = new Date().toLocaleDateString();
 
     // 8 - Llamar a la función ventasServices.crear para registrar la venta
-    ventasServices.crear(idUsuario, emailUsuario, idProducto, nameProducto, cantidad, fecha);
+    await ventasServices.crear(idUsuario, emailUsuario, idProducto, nameProducto.innerText, cantidad, fecha);
 
     // 9 - Redireccionar a la página "tienda.html"
     location.replace("tienda.html");
