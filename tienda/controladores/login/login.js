@@ -200,7 +200,7 @@ async function usuarioExiste() {
         sessionStorage.setItem('usuarioActivo', usuarioActivo);
         sessionStorage.setItem('usuarioFoto', usuarioFoto);
 
-        window.location.href = "#/home" ;
+        window.location.href = "/#home" ;
 
         return usuarioId
     }

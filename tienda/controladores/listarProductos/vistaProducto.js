@@ -22,11 +22,8 @@ export async function vistaProducto() {
     // 4 - Leer los datos del producto identificado por idProducto
     const producto = await productosServices.listar(idProducto);
 
-    // 5 - Llamar a la función htmlVistaProducto
-    const vistaProductoHtml = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio, producto.foto);
-
-    // 6 - Asignar el resultado al elemento .vistaProducto
-    vistaProductoElement.innerHTML = vistaProductoHtml;
+    // 5 - Llamar a la función htmlVistaProducto y enlazar   
+    vistaProductoElement.innerHTML = htmlVistaProducto(producto.id, producto.nombre, producto.descripcion, producto.precio, producto.foto);
 
     // 7 - Enlazar el evento click del botón btnComprar a la función registrarCompra
     const btnComprar = document.getElementById('btnComprar');
@@ -95,8 +92,10 @@ function registrarCompra() {
     // 5 - Almacenar los datos necesarios para registrar la venta
     const idUsuario = session.idUsuario;
     const emailUsuario = session.emailUsuario;
-    const idProducto = nameProducto.getAttribute('data-idproducto');
+
+        
     const nameProducto = document.getElementById('nameProducto').value;
+    const idProducto = nameProducto.getAttribute('data-idproducto');
     const cantidad = document.getElementById('cantidadProducto').value;
     const fecha = new Date();
 
