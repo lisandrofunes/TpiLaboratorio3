@@ -68,10 +68,8 @@ var txtIniciarSesion;
 
 
 export async function login() {
-    /** 3- Esta función se encarga de llamar a la función crearFormulario y de enlazar el evento submit del formulario de login
-     * 
-    */
-    //tomar el formulario, capturar el submir para cancelarlo
+    //  3- Esta función se encarga de llamar a la función crearFormulario y de enlazar el evento submit del formulario de login
+    // tomar el formulario, capturar el submir para cancelarlo
     formulario = document.querySelector("formLogin");
 
     crearFormulario(false);

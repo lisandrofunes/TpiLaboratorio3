@@ -54,7 +54,7 @@ async function asignarProducto(id) {
             var categoriaId = document.querySelector(`#categoria_${id}`);
             const productos = categoriaId.querySelector('.productos');
             for (let i = 0; i < respuesta.length; i++) {
-                var stringProducto = htmlItemProducto(respuesta[i].idCategoria, respuesta[i].foto, respuesta[i].nombre, respuesta[i].precio);
+                var stringProducto = htmlItemProducto(respuesta[i].id, respuesta[i].foto, respuesta[i].nombre, respuesta[i].precio);
                 stringHtmlNuevo += stringProducto;
                 productos.innerHTML = stringHtmlNuevo
             }
