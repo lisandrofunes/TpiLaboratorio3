@@ -29,8 +29,8 @@ export async function vistaProducto() {
     vistaProductoElement.innerHTML = vistaProductoHtml;
 
     // 7 - Enlazar el evento click del botón btnComprar a la función registrarCompra
-    const btnComprar = document.querySelector('#btnComprar');
-    btnComprar.addEventListener('click', registrarCompra, false);
+    const btnComprar = document.getElementById('btnComprar');
+    btnComprar.addEventListener('click', registrarCompra);
 }
 
 
@@ -56,7 +56,7 @@ function htmlVistaProducto(id, nombre, descripcion, precio, imagen) {
 
                 <p id="descripcionProducto">${descripcion}</p>
 
-                <p id="precioProducto">${precio}</p>
+                <p id="precioProducto">$${precio}</p>
 
                 <div class="form-group">
                     <label for="cantidadProducto">Cantidad</label>
@@ -95,10 +95,10 @@ function registrarCompra() {
     // 5 - Almacenar los datos necesarios para registrar la venta
     const idUsuario = session.idUsuario;
     const emailUsuario = session.emailUsuario;
-    const idProducto = document.querySelector('.btnComprar').dataset.idproducto; // ver aca la diferencia
+    const idProducto = nameProducto.getAttribute('data-idproducto');
     const nameProducto = document.getElementById('nameProducto').value;
     const cantidad = document.getElementById('cantidadProducto').value;
-    const fecha = new Date().toISOString();
+    const fecha = new Date();
 
     // 8 - Llamar a la función ventasServices.crear para registrar la venta
     ventasServices.crear(idUsuario, emailUsuario, idProducto, nameProducto, cantidad, fecha);

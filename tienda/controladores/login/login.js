@@ -254,9 +254,9 @@ export function getUsuarioAutenticado() {
      */
 
     var session = new Object()
-    sesion.autenticado = sessionStorage.getItem("autenticado") === "true"
-    sesion.idUsuario = sessionStorage.getItem("idUsuario")
-    sesion.email = sessionStorage.getItem("email")
+    session.autenticado = sessionStorage.getItem("autenticado") === "true"
+    session.idUsuario = sessionStorage.getItem("idUsuario")
+    session.email = sessionStorage.getItem("email")
     return session
 }
 
