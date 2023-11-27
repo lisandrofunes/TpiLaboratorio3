@@ -4,7 +4,7 @@ import { usuariosServices } from "../../../servicios/usuarios-servicios.js";
 /**1- Se debe asignar a la siguiente constante todo el código correspondiente al componente de login (/asset/modulos/login.html)  */
 const htmlLogin =
     `
-    <div class="contenedorLogin">
+    <div id="contenedorLogin" class="contenedorLogin">
         <div class="cajaLogin">
             <p id='registrarse'>Registrarse</p>
             <p id='iniciarSesion'>Iniciar Sesion</p>
@@ -128,6 +128,7 @@ function crearFormulario(registrar) {
     inputTelefono = document.getElementById('telefono');
     txtRegistrarse = document.getElementById('registrarse');
     txtIniciarSesion = document.getElementById('iniciarSesion');
+    var contenedor = document.getElementById("contenedorLogin");
 
     if (!registrar) {
         inputRepetirPass.remove();
@@ -138,11 +139,13 @@ function crearFormulario(registrar) {
         inputCiudad.remove();
         inputDireccion.remove();
         inputTelefono.remove();
+        
     } else {
         const btnRegistrar = document.getElementById('registrar');
         inputRepetirPass.style.display = 'block';
         txtIniciarSesion.remove();
         btnRegistrar.innerText = 'Registrarse';
+        contenedor.setAttribute("style", "height: 100%; margin-top:20px")
 
     }
 
