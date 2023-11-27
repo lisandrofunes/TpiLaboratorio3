@@ -85,7 +85,7 @@ async function registrarCompra() {
     if (!session.autenticado) {
         // Emitir una alerta si el usuario no ha iniciado sesión
         alert("Antes de realizar una compra, debes iniciar sesión.");
-        return; // Salir de la ejecución de la función
+        location.replace("tienda.html#login"); // Salir de la ejecución de la función
     }
 
     // 4 - Continuar la ejecución si el usuario ha iniciado sesión
