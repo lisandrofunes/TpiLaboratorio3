@@ -74,22 +74,13 @@ async function asignarProducto(id) {
 
 }
 export async function listarProductos() {
-    /************************** .
-     /* 1- ESTA FUNCION DEBERA SELECCIONAR DESDE DEL DOM  LA CLASE .seccionProductos. */
-    /* 2- DEBERÁ CONSULTAR LA API-REST PARA TRAER LAS CATEGORIAS Y  CONSTRUIR UN BUCLE PARA RECORRERLAS UNA A UNA. */
-    /* 3- EN EL INTERIOR DE ESTE BUCLE LLAMARA A LA FUNCION htmlCategoria PARA ASIGNAR EL NOMBRE DE LA CATEGORIA Y SU ID*/
-    /* 4- SE DEBERA ASIGNAR EL RESULTADO DE FUNCION ANTERIOR AL ELEMENTO DEL DOM .seccionProductos */
-    /* 5- LUEGO DEBERÁ LLAMAR UNA FUNCION, asignarProducto, QUE RECIBA COMO PARAMETRO EL ID DE LA CATEGORIA  */
-    /* 6- FIN DEL BUCLE Y FIN DE LA FUNCION */
+    // 1- ESTA FUNCION DEBERA SELECCIONAR DESDE DEL DOM  LA CLASE .seccionProductos. */
+    // 2- DEBERÁ CONSULTAR LA API-REST PARA TRAER LAS CATEGORIAS Y  CONSTRUIR UN BUCLE PARA RECORRERLAS UNA A UNA. */
+    // 3- EN EL INTERIOR DE ESTE BUCLE LLAMARA A LA FUNCION htmlCategoria PARA ASIGNAR EL NOMBRE DE LA CATEGORIA Y SU ID*/
+    // 4- SE DEBERA ASIGNAR EL RESULTADO DE FUNCION ANTERIOR AL ELEMENTO DEL DOM .seccionProductos */
+    // 5- LUEGO DEBERÁ LLAMAR UNA FUNCION, asignarProducto, QUE RECIBA COMO PARAMETRO EL ID DE LA CATEGORIA  */
+    // 6- FIN DEL BUCLE Y FIN DE LA FUNCION */
     var sectionProductos = document.querySelector(".seccionProductos");
-    // var listaCategorias = categoriasServices.listar('todas');
-    // for (let i = 0; i<length(listaCategorias); i++){
-    //     var constructorCategoria = htmlCategoria(listaCategorias[i][0], listaCategorias[i][1]);
-    //     sectionProductos.innerHTML(constructorCategoria);
-    //     asignarProducto(listaCategorias[i][0])
-    // }
-
-    //
 
     await categoriasServices.listar("all")
         .then(respuesta => {

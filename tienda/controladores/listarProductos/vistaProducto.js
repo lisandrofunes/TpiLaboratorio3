@@ -74,8 +74,6 @@ function leerParametro() {
     return cad.trim();
 }
 
-
-
 async function registrarCompra() {
     // 1 - Procesar el evento click del botón btnComprar
     // 2 - Recuperar el objeto session utilizando la función getUsuarioAutenticado del módulo login.js
@@ -92,7 +90,6 @@ async function registrarCompra() {
     // 5 - Almacenar los datos necesarios para registrar la venta
     const idUsuario = session.idUsuario;
     const emailUsuario = session.email;
-
         
     const nameProducto = document.getElementById('nameProducto');
     const idProducto = nameProducto.getAttribute('data-idProducto');

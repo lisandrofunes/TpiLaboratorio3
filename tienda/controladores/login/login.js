@@ -64,20 +64,16 @@ var inputTelefono;
 var txtRegistrarse;
 var txtIniciarSesion;
 
-// ya esta hecho
-
 
 export async function login() {
-    //  3- Esta función se encarga de llamar a la función crearFormulario y de enlazar el evento submit del formulario de login
+    // 3- Esta función se encarga de llamar a la función crearFormulario y de enlazar el evento submit del formulario de login
     // tomar el formulario, capturar el submir para cancelarlo
     formulario = document.querySelector("formLogin");
 
     crearFormulario(false);
 
     formulario.addEventListener("submit", function (event) {
-        //event.preventDefault(); // Esto evita que se envíe el formulario
 
-        // Llamada a una función asincrónica
         ingresar(event);
     });
 
@@ -173,13 +169,13 @@ async function ingresar(e) {
     inputEmail = document.getElementById('loginEmail').value;
     inputPassword = document.getElementById('loginPassword').value;
 
-    // Llamar a la función usuarioExiste para verificar si el usuario es válido
+   
     const idUsuario = await usuarioExiste(inputEmail, inputPassword);
 
     if (idUsuario) {
         setUsuarioAutenticado(true, idUsuario);
         mostrarUsuario(inputEmail);
-        // location.replace("tienda.html");
+
         window.location.href = "#";
     } else {
         alert('Email o contraseña incorrecto, intenta nuevamente');
@@ -265,18 +261,17 @@ export function mostrarUsuario(email) {
 
     const btnLogin = document.querySelector('.btnLogin');
     if (btnLogin) {
-        btnLogin.textContent = email; // Asignar el texto del parámetro email al botón de login si existe
+        btnLogin.textContent = email; 
     }
 
     const btnRegister = document.querySelector('.btnRegister');
     if (btnRegister) {
-        btnRegister.textContent = 'Logout'; // Asignar texto "Logout" al botón de registro si existe
-        btnRegister.setAttribute('href', '#logout'); // Asignar el valor '#logout' al atributo href del botón de registro
+        btnRegister.textContent = 'Logout';
+        btnRegister.setAttribute('href', '#logout'); 
     }
 }
 
 function mostrarMensaje(msj) {
-    // Esta función muestra una alerta con el texto recibido en el parámetro msj.
     alert(msj);
 }
 
